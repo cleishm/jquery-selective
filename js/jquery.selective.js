@@ -293,7 +293,7 @@
                 this._pendingDelete = false;
                 this.openDropdown();
                 this._adjustSize();
-                this._searchForInputTerm();
+                this._searchInputChanged();
             }
             return true;
         },
@@ -317,7 +317,7 @@
             } else {
                 this._searchInput.hide();
             }
-            this._searchForInputTerm();
+            this._searchInputChanged();
         },
 
         closeDropdown: function() {
@@ -344,7 +344,7 @@
             this._highlightedItem = $([]);
         },
 
-        _searchForInputTerm: function() {
+        _searchInputChanged: function() {
             var self = this;
             if (this._searchTimer)
                 clearTimeout(this._searchTimer);
@@ -590,10 +590,10 @@
                 }
                 self._trigger('selectedItem', this, itemData);
             });
-            if (!evt.metaKey)
-                this.closeDropdown();
             if (this.multiple() || evt.metaKey)
                 this._searchInput.focus();
+            else
+                this.closeDropdown();
             this._adjustSize();
         },
 
