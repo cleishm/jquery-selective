@@ -285,7 +285,7 @@
   background: #3875d7;
   color: #fff;
 }
-.selective-multiple .selective-items .selected {
+.selective-items .selected {
   color: #999;
 }
 .selective-items .group {
