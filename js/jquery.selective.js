@@ -30,8 +30,8 @@
                 return $('<span />').text(
                     term.length? 'No results match "' + term + '"' : 'No options available');
             },
-            selectedItem: undefined,
-            deselectedItem: undefined
+            selectedOption: undefined,
+            deselectedOption: undefined
         },
 
         _create: function() {
@@ -84,7 +84,7 @@
 
             this._searchInput.keydown($.proxy(this._searchKeydown, this));
 
-            this.clearItems();
+            this.clearListItems();
 
             if (this.searchPrefetch())
                 this.search('');
@@ -115,7 +115,7 @@
             var selectedOptions = this._selectedOptions();
             this.element.empty().append(selectedOptions);
             selectedOptions.each(function() {
-                tagList.append(self.createTag($(this).text(), optionValue($(this))));
+                tagList.append(self._createTag($(this).text(), optionValue($(this))));
             });
 
             this._container.addClass('selective-multiple').prepend(tagList.append(
@@ -233,7 +233,7 @@
                 else
                     this._searchInput.val('');
                 if (this._lastSearch != '') {
-                    this.clearItems();
+                    this.clearListItems();
                     this._lastSearch = undefined;
                 }
             }
@@ -259,10 +259,10 @@
                 return false;
             } else {
                 if (evt.keyCode == 38) {
-                    this._highlightPrevItem();
+                    this._highlightPrevListItem();
                     return false;
                 } else if (evt.keyCode == 40) {
-                    this._highlightNextItem();
+                    this._highlightNextListItem();
                 } else if (evt.keyCode == 13) {
                     this._selectHighlightedItem(evt);
                 }
@@ -286,7 +286,7 @@
                     this._pendingDelete = true;
                     tag.addClass('selective-tag-focus');
                 } else {
-                    this.removeTag(tag);
+                    this._removeTag(tag);
                     this._pendingDelete = false;
                 }
             } else if (alphanumericKeyCode(evt.keyCode) || evt.keyCode == 8) {
@@ -310,7 +310,7 @@
             this._container.addClass('selective-dropped');
             this._adjustSize();
             this._dropdown.show();
-            this._highlightSelectedItem();
+            this._highlightSelectedListItem();
             if (this.searchEnabled()) {
                 this._container.attr('tabindex', -1);
                 this._searchInput.attr('tabindex', 0).focus();
@@ -339,9 +339,9 @@
             }
         },
 
-        clearItems: function() {
+        clearListItems: function() {
             this._itemList.empty();
-            this._highlightedItem = $([]);
+            this._highlightedListItem = $([]);
         },
 
         _searchInputChanged: function() {
@@ -362,7 +362,7 @@
             this._lastSearch = term;
 
             if (term.length < this.searchMinLength()) {
-                this.clearItems();
+                this.clearListItems();
                 this._itemList.append(this._searchRequiredIndicator());
                 return;
             }
@@ -387,8 +387,8 @@
                 { term: term },
                 function(response) {
                     searchComplete(function() {
-                        self._createItems(response, term);
-                        self._highlightSelectedItem();
+                        self._createListItems(response, term);
+                        self._highlightSelectedListItem();
                     });
                 },
                 function(message) {
@@ -401,7 +401,7 @@
             }
             function displayIndicator() {
                 clearIndicatorTimer();
-                self.clearItems();
+                self.clearListItems();
                 self._itemList.append(self._pendingSearchIndicator);
                 self._pendingSearchIndicator = undefined;
                 self._searchIndicatorVisible = new Date().getTime();
@@ -423,7 +423,7 @@
                         return;
                     self._currentSearch = undefined;
                     clearIndicatorTimer();
-                    self.clearItems();
+                    self.clearListItems();
                     handler.call(self);
                     self._searchIndicatorVisible = undefined;
                 }
@@ -449,14 +449,13 @@
         },
 
         _showErrorIndicator: function(text) {
-            this.clearItems();
+            this.clearListItems();
             if (text)
                 this._itemList.append($('<li class="error" />').text(text));
         },
 
-        _createItems: function(items, term) {
+        _createListItems: function(items, term) {
             var self = this;
-            this.clearItems();
 
             if (items.length == 0) {
                 this._itemList.append(this._noResultsIndicator(term));
@@ -477,18 +476,18 @@
             }).get();
 
             this._itemList.find('.item:not(.disabled)').mousemove(function() {
-                self._highlightItem($(this));
+                self._highlightListItem($(this));
             }).click(function(evt) {
-                self._highlightItem($(this));
-                self.selectItem($(this), evt);
+                self._highlightListItem($(this));
+                self._selectListItem($(this), evt);
             }).mouseup(function(evt) {
                 if (!self._mouseDragActive)
                     return true;
-                self._highlightItem($(this));
-                self.selectItem($(this), evt);
+                self._highlightListItem($(this));
+                self._selectListItem($(this), evt);
             }).each(function() {
-                var itemData = $(this).data('selective.item');
-                if (itemData && $.inArray(itemData.value, selectedValues) >= 0)
+                var item = $(this).data('selective.item');
+                if (item && $.inArray(item.value, selectedValues) >= 0)
                     $(this).addClass('selected');
             });
         },
@@ -521,15 +520,15 @@
             return li.text(item.label || item.value);
         },
 
-        _highlightItem: function(item) {
-            this._highlightedItem.removeClass('highlighted');
-            this._highlightedItem = item.addClass('highlighted');
-            if ((this._itemList.has(item).length == 0) || !this.dropped())
+        _highlightListItem: function(listItem) {
+            this._highlightedListItem.removeClass('highlighted');
+            this._highlightedListItem = listItem.addClass('highlighted');
+            if ((this._itemList.has(listItem).length == 0) || !this.dropped())
                 return;
             var listTop = this._itemList.scrollTop();
             var listBottom = listTop + this._itemList.height();
-            var itemTop = item.position().top + listTop;
-            var itemBottom = itemTop + item.outerHeight();
+            var itemTop = listItem.position().top + listTop;
+            var itemBottom = itemTop + listItem.outerHeight();
             if (itemTop < listTop) {
                 this._itemList.scrollTop(itemTop);
             } else if (itemBottom >= listBottom) {
@@ -538,33 +537,33 @@
             }
         },
 
-        _highlightNextItem: function() {
-            var next = (this._highlightedItem.length)?
-                    this._highlightedItem.nextAll('.item:not(.disabled):first') :
+        _highlightNextListItem: function() {
+            var next = (this._highlightedListItem.length)?
+                    this._highlightedListItem.nextAll('.item:not(.disabled):first') :
                     this._itemList.children('.item:not(.disabled):first');
             if (next.length == 0)
                 return;
-            this._highlightItem(next);
+            this._highlightListItem(next);
         },
 
-        _highlightPrevItem: function() {
-            this._highlightItem(this._highlightedItem.prevAll('.item:not(.disabled):first'));
+        _highlightPrevListItem: function() {
+            this._highlightListItem(this._highlightedListItem.prevAll('.item:not(.disabled):first'));
         },
 
-        _highlightSelectedItem: function() {
-            var selectedItem = this._itemList.children('.item.selected:not(.disabled):first');
-            this._highlightItem(selectedItem.length?
-                    selectedItem : this._itemList.children('.item:not(.disabled):first'));
+        _highlightSelectedListItem: function() {
+            var selectedListItem = this._itemList.children('.item.selected:not(.disabled):first');
+            this._highlightListItem(selectedListItem.length?
+                    selectedListItem : this._itemList.children('.item:not(.disabled):first'));
         },
 
         _selectHighlightedItem: function(evt) {
-            if (this._highlightedItem && this._highlightedItem.length)
-                this.selectItem(this._highlightedItem, evt);
+            if (this._highlightedListItem && this._highlightedListItem.length)
+                this._selectListItem(this._highlightedListItem, evt);
             else
                 this.closeDropdown();
         },
 
-        selectItem: function(items, evt) {
+        _selectListItem: function(items, evt) {
             var self = this;
             items.each(function() {
                 var item = $(this);
@@ -584,7 +583,7 @@
                 item.addClass('selected');
 
                 if (self.multiple()) {
-                    self._control.children(':last').before(self.createTag(selectedlabel, itemData.value, 0));
+                    self._control.children(':last').before(self._createTag(selectedlabel, itemData.value, 0));
                     self._searchInput.val('');
                 } else {
                     self._control.find('span').text(selectedlabel)
@@ -616,19 +615,19 @@
             });
         },
 
-        createTag: function(content, value) {
+        _createTag: function(content, value) {
             var self = this;
             var tag = $('<li class="selective-tag" />').data('selective.value', value);
             var removeLink = $('<a class="selective-deselect" />').mousedown(function(evt) {
                 evt.stopPropagation();
             }).click(function() {
-                self.removeTag(tag);
+                self._removeTag(tag);
                 return false;
             });
             return tag.append($('<span />').append(content)).append(removeLink);
         },
 
-        removeTag: function(tag) {
+        _removeTag: function(tag) {
             var self = this;
             var value = tag.data('selective.value');
             tag.remove();
