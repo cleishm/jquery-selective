@@ -583,7 +583,7 @@
             else
                 this.closeDropdown();
 
-            this._trigger('selectedOption', option, item);
+            this._trigger('selectedOption', 0, { elem: option.get(0), item: item });
             this._adjustSize();
         },
 
@@ -626,8 +626,8 @@
                         item.removeClass('selected');
                     }
                 });
+                self._trigger('deselectedOption', 0, { elem: this, item: {value: value} });
                 option.remove();
-                self._trigger('deselectedOption', option, {value: value});
             });
         },
 
