@@ -113,7 +113,7 @@
             var tagList = $('<ul class="selective-control" />');
 
             var selectedOptions = this._selectedOptions();
-            this.element.empty().append(selectedOptions);
+            this.element.children().not(selectedOptions).remove();
             selectedOptions.each(function() {
                 tagList.append(self._createTag($(this).text(), optionValue($(this))));
             });
