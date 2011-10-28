@@ -369,7 +369,7 @@
 
             this._pendingSearchIndicator = this._searchingIndicator(term);
 
-            var searchIndicatorDelay = 
+            var searchIndicatorDelay =
                 (!this._searchIndicatorVisible && this._itemList.children().length > 0)?
                     this.options.searchIndicatorDelay : 0;
 
@@ -578,8 +578,9 @@
                     self._deselectOptions(self._selectedOptions());
 
                 var selectedlabel = itemData.selectedlabel || item.text();
-                self.element.append($('<option selected="selected" />')
-                        .val(itemData.value).text(selectedlabel));
+                var option = $('<option selected="selected" />')
+                        .val(itemData.value).text(selectedlabel);
+                self.element.append(option);
                 item.addClass('selected');
 
                 if (self.multiple()) {
@@ -588,7 +589,7 @@
                 } else {
                     self._control.find('span').text(selectedlabel)
                 }
-                self._trigger('selectedItem', this, itemData);
+                self._trigger('selectedItem', option, itemData);
             });
             if (this.multiple() || evt.metaKey)
                 this._searchInput.focus();
@@ -608,10 +609,10 @@
                     var itemData = item.data('selective.item');
                     if (value == itemData.value) {
                         item.removeClass('selected');
-                        self._trigger('deselectedItem', item, itemData);
                     }
                 });
                 option.remove();
+                self._trigger('deselectedItem', option, {value: value});
             });
         },
 
