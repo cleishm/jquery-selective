@@ -556,6 +556,37 @@
                     selectedListItem : this._itemList.children('.item:not(.disabled):first'));
         },
 
+        select: function(item, dontClose) {
+            if (!this.multiple())
+                this._deselectOptions(this._selectedOptions());
+
+            var selectedlabel = item.selectedlabel || item.label || item.text;
+            var option = $('<option selected="selected" />')
+                    .val(item.value).text(selectedlabel);
+            this.element.append(option);
+
+            this._itemList.children('.item:not(.disabled)').each(function() {
+                var otherItem = $(this).data('selective.item');
+                if (otherItem && otherItem.value == item.value)
+                    $(this).addClass('selected');
+            });
+
+            if (this.multiple()) {
+                this._control.children(':last').before(this._createTag(selectedlabel, item.value, 0));
+                this._searchInput.val('');
+            } else {
+                this._control.find('span').text(selectedlabel)
+            }
+
+            if (this.multiple() || dontClose)
+                this._searchInput.focus();
+            else
+                this.closeDropdown();
+
+            this._trigger('selectedOption', option, item);
+            this._adjustSize();
+        },
+
         _selectHighlightedItem: function(evt) {
             if (this._highlightedListItem && this._highlightedListItem.length)
                 this._selectListItem(this._highlightedListItem, evt);
@@ -563,37 +594,22 @@
                 this.closeDropdown();
         },
 
-        _selectListItem: function(items, evt) {
-            var self = this;
-            items.each(function() {
-                var item = $(this);
-                if (item.hasClass('selected'))
-                    return;
-                var itemData = item.data('selective.item');
-                if (!itemData)
-                    return;
+        _selectListItem: function(listItem, evt) {
+            if (listItem.hasClass('selected'))
+                return;
 
-                if (!self.multiple())
-                    self._deselectOptions(self._selectedOptions());
+            var item = listItem.data('selective.item');
+            if (!item)
+                return;
 
-                var selectedlabel = itemData.selectedlabel || item.text();
-                var option = $('<option selected="selected" />')
-                        .val(itemData.value).text(selectedlabel);
-                self.element.append(option);
-                item.addClass('selected');
+            this.select(item, evt.metaKey);
+        },
 
-                if (self.multiple()) {
-                    self._control.children(':last').before(self._createTag(selectedlabel, itemData.value, 0));
-                    self._searchInput.val('');
-                } else {
-                    self._control.find('span').text(selectedlabel)
-                }
-                self._trigger('selectedItem', option, itemData);
-            });
-            if (this.multiple() || evt.metaKey)
-                this._searchInput.focus();
-            else
-                this.closeDropdown();
+        deselect: function(item) {
+            this._deselectOptions(this._selectedOptions().filter(function() {
+                return (item.value == optionValue($(this)));
+            }));
+            this._searchInput.focus();
             this._adjustSize();
         },
 
@@ -611,7 +627,7 @@
                     }
                 });
                 option.remove();
-                self._trigger('deselectedItem', option, {value: value});
+                self._trigger('deselectedOption', option, {value: value});
             });
         },
 
@@ -628,16 +644,9 @@
         },
 
         _removeTag: function(tag) {
-            var self = this;
             var value = tag.data('selective.value');
             tag.remove();
-
-            this._deselectOptions(this._selectedOptions().filter(function() {
-                var option = $(this);
-                return value == optionValue(option);
-            }));
-            this._adjustSize();
-            this._searchInput.focus();
+            this.deselect({value: value});
         },
 
         _adjustSize: function() {
