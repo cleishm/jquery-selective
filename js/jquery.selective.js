@@ -463,7 +463,14 @@
                 return;
             }
 
-            this.options.renderList.call(this, this._itemList, items);
+            this.options.renderList.call(this, this._itemList,
+                $.map(items, function(item) {
+                    // ensure value is a string
+                    return $.extend({}, item, {
+                        value: item.value + ''
+                    });
+                })
+            );
 
             var selectedValues = this._selectedOptions().map(function() {
                 return optionValue($(this));
