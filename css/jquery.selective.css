@@ -1,0 +1,299 @@
+/* vi:set ts=2 sw=2 expandtab: */
+.selective-container { _noFocusLine: expression(this.hideFocus=true); }
+.selective-container::-moz-focus-inner {border:0;}
+.selective-container:focus {outline:none;}
+
+.selective-container {
+  font-size: 13px;
+  position: relative;
+}
+
+.selective-dropdown {
+  background: #fff;
+  border: 1px solid #aaa;
+  border-top: 0;
+  position: absolute;
+  top: 29px;
+  -webkit-box-shadow: 0 4px 5px rgba(0,0,0,.15);
+  -moz-box-shadow : 0 4px 5px rgba(0,0,0,.15);
+  -o-box-shadow : 0 4px 5px rgba(0,0,0,.15);
+  box-shadow : 0 4px 5px rgba(0,0,0,.15);
+  z-index: 999;
+}
+
+.selective-search {
+  float: left;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.selective-single .selective-control {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0 0 0 8px;
+  color: #444;
+  height: 26px;
+  line-height: 26px;
+  background-color: #fff;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(0.5, white));
+  background-image: -webkit-linear-gradient(center bottom, #eeeeee 0%, white 50%);
+  background-image: -moz-linear-gradient(center bottom, #eeeeee 0%, white 50%);
+  background-image: -o-linear-gradient(top, #eeeeee 0%,#ffffff 50%);
+  background-image: -ms-linear-gradient(top, #eeeeee 0%,#ffffff 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 );
+  background-image: linear-gradient(top, #eeeeee 0%,#ffffff 50%);
+  border: 1px solid #aaa;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.selective-single.selective-active .selective-control {
+  border: 1px solid #5897fb;
+  -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
+  -moz-box-shadow: 0 0 5px rgba(0,0,0,.3);
+  -o-box-shadow: 0 0 5px rgba(0,0,0,.3);
+  box-shadow: 0 0 5px rgba(0,0,0,.3);
+}
+.selective-single.selective-dropped .selective-control {
+  background-color: #eee;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, white), color-stop(0.5, #eeeeee));
+  background-image: -webkit-linear-gradient(center bottom, white 0%, #eeeeee 50%);
+  background-image: -moz-linear-gradient(center bottom, white 0%, #eeeeee 50%);
+  background-image: -o-linear-gradient(bottom, white 0%, #eeeeee 50%);
+  background-image: -ms-linear-gradient(top, #ffffff 0%,#eeeeee 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 );
+  background-image: linear-gradient(top, #ffffff 0%,#eeeeee 50%);
+  border: 1px solid #aaa;
+  -webkit-border-bottom-left-radius : 0;
+  -webkit-border-bottom-right-radius: 0;
+  -moz-border-radius-bottomleft : 0;
+  -moz-border-radius-bottomright: 0;
+  border-bottom-left-radius : 0;
+  border-bottom-right-radius: 0;
+  -webkit-box-shadow: 0 1px 0 #fff inset;
+  -moz-box-shadow : 0 1px 0 #fff inset;
+  -o-box-shadow : 0 1px 0 #fff inset;
+  box-shadow : 0 1px 0 #fff inset;
+}
+.selective-single .selective-control span {
+  margin-right: 26px;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+.selective-single .selective-control div {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 18px;
+  background-color: #ccc;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #ccc), color-stop(0.6, #eee));
+  background-image: -webkit-linear-gradient(center bottom, #ccc 0%, #eee 60%);
+  background-image: -moz-linear-gradient(center bottom, #ccc 0%, #eee 60%);
+  background-image: -o-linear-gradient(bottom, #ccc 0%, #eee 60%);
+  background-image: -ms-linear-gradient(top, #cccccc 0%,#eeeeee 60%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#eeeeee',GradientType=0 );
+  background-image: linear-gradient(top, #cccccc 0%,#eeeeee 60%);
+  border-left: 1px solid #aaa;
+  -webkit-border-radius: 0 4px 4px 0;
+  -moz-border-radius : 0 4px 4px 0;
+  border-radius : 0 4px 4px 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.selective-single.selective-dropped .selective-control div {
+  background: transparent;
+  border-left: none;
+}
+.selective-single .selective-control div b {
+  background: url(selective-sprite.png) no-repeat 0 1px;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.selective-single.selective-dropped .selective-control div b {
+  background-position: -18px 1px;
+}
+.selective-single .selective-search {
+  padding: 3px 4px;
+  position: relative;
+  margin: 0;
+  white-space: nowrap;
+  z-index: 1010;
+}
+.selective-single .selective-search input {
+  background: #fff url(selective-sprite.png) no-repeat 100% -22px;
+  background: url(selective-sprite.png) no-repeat 100% -22px, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, white), color-stop(0.99, #eeeeee));
+  background: url(selective-sprite.png) no-repeat 100% -22px, -webkit-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+  background: url(selective-sprite.png) no-repeat 100% -22px, -moz-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+  background: url(selective-sprite.png) no-repeat 100% -22px, -o-linear-gradient(bottom, white 85%, #eeeeee 99%);
+  background: url(selective-sprite.png) no-repeat 100% -22px, -ms-linear-gradient(top, #ffffff 85%,#eeeeee 99%);
+  background: url(selective-sprite.png) no-repeat 100% -22px, -ms-linear-gradient(top, #ffffff 85%,#eeeeee 99%);
+  background: url(selective-sprite.png) no-repeat 100% -22px, linear-gradient(top, #ffffff 85%,#eeeeee 99%);
+  margin: 1px 0;
+  padding: 4px 20px 4px 5px;
+  outline: 0;
+  border: 1px solid #aaa;
+  font-family: sans-serif;
+  font-size: 1em;
+}
+.selective-single .selective-dropdown {
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius : 0 0 4px 4px;
+  border-radius : 0 0 4px 4px;
+  -moz-background-clip : padding;
+  -webkit-background-clip: padding-box;
+  background-clip : padding-box;
+}
+
+.selective-multiple .selective-control {
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  cursor: text;
+  height: auto !important;
+  height: 1%;
+  background-color: #fff;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.85, white), color-stop(0.99, #eeeeee));
+  background-image: -webkit-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+  background-image: -moz-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+  background-image: -o-linear-gradient(bottom, white 85%, #eeeeee 99%);
+  background-image: -ms-linear-gradient(top, #ffffff 85%,#eeeeee 99%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 );
+  background-image: linear-gradient(top, #ffffff 85%,#eeeeee 99%);
+  border: 1px solid #aaa;
+}
+.selective-multiple.selective-active .selective-control {
+  -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
+  -moz-box-shadow : 0 0 5px rgba(0,0,0,.3);
+  -o-box-shadow : 0 0 5px rgba(0,0,0,.3);
+  box-shadow : 0 0 5px rgba(0,0,0,.3);
+  border: 1px solid #5897fb;
+}
+.selective-multiple .selective-control li {
+  float: left;
+  list-style: none outside none;
+}
+.selective-multiple .selective-search input {
+  color: #999;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 5px;
+  margin: 1px 0;
+  outline: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow : none;
+  -o-box-shadow : none;
+  box-shadow : none;
+}
+.selective-multiple.selective-active .selective-search input {
+  color: #111 !important;
+}
+.selective-multiple .selective-tag {
+  -webkit-border-radius: 3px;
+  -moz-border-radius   : 3px;
+  border-radius        : 3px;
+  -moz-background-clip   : padding;
+  -webkit-background-clip: padding-box;
+  background-clip        : padding-box;
+  background-color: #e4e4e4;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e4e4e4), color-stop(0.7, #eeeeee));
+  background-image: -webkit-linear-gradient(center bottom, #e4e4e4 0%, #eeeeee 70%);
+  background-image: -moz-linear-gradient(center bottom, #e4e4e4 0%, #eeeeee 70%);
+  background-image: -o-linear-gradient(bottom, #e4e4e4 0%, #eeeeee 70%);
+  background-image: -ms-linear-gradient(top, #e4e4e4 0%,#eeeeee 70%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4e4e4', endColorstr='#eeeeee',GradientType=0 );
+  background-image: linear-gradient(top, #e4e4e4 0%,#eeeeee 70%);
+  color: #333;
+  border: 1px solid #b4b4b4;
+  line-height: 13px;
+  padding: 3px 19px 3px 6px;
+  margin: 3px 0 3px 5px;
+  position: relative;
+}
+.selective-multiple .selective-tag span {
+  cursor: default;
+}
+.selective-multiple .selective-tag-focus {
+  background: #d4d4d4;
+}
+.selective-multiple .selective-deselect {
+  display: block;
+  position: absolute;
+  right: 3px;
+  top: 4px;
+  width: 12px;
+  height: 13px;
+  font-size: 1px;
+  background: url(selective-sprite.png) right top no-repeat;
+  cursor: pointer;
+}
+.selective-multiple .selective-deselect:hover {
+  background-position: right -11px;
+}
+.selective-multiple .selective-tag-focus .selective-deselect {
+  background-position: right -11px;
+}
+
+.selective-items {
+  margin: 0 4px 4px 0;
+  max-height: 190px;
+  padding: 0 0 0 4px;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+.selective-items li {
+  line-height: 80%;
+  padding: 7px 7px 8px;
+  margin: 0;
+  list-style: none;
+  cursor: default;
+}
+.selective-items .info {
+  color: #999;
+  background: #f4f4f4;
+}
+.selective-items .no-results {
+  background: #f4f4f4;
+}
+.selective-items .error {
+  color: #900;
+  background: #f4f4f4;
+}
+.selective-items .deselect {
+  color: #999;
+  background: #f4f4f4;
+}
+.selective-items .highlighted {
+  background: #3875d7;
+  color: #fff;
+}
+.selective-multiple .selective-items .selected {
+  color: #999;
+}
+.selective-items .group {
+  font-weight: bold;
+}
+.selective-items .grouped {
+  padding-left: 20px;
+}
+.selective-items .disabled {
+  color: #999;
+}
